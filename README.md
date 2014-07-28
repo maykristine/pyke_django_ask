@@ -1,3 +1,10 @@
+pyke_django_ask
+===============
+
+"django_ask" module for Python Knowledge Engine (pyke)
+
+documentation
+-------------
 Spaceman:  OK pyke_test code commited.
 
 me:  got it

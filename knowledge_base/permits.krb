@@ -1,0 +1,178 @@
+# Rules for what permits are required
+# Top level goals
+# actions_required_summary goal
+# actions_required_summary($xlist, $summary)
+
+summary_degenerate
+    use actions_require_summary(($x), (($act, ($x)),))
+    when
+        action_required($x, $act)
+
+summary_recurse
+    use actions_require_summary(($x, *$xrest), $sum)
+    when
+        action_required($x, $act)
+        actions_require_summary($xrest, $sum_unmerged)
+        merged_actlist($sum, $sum_unmerged, $x, $act)
+
+# merged_actlist($merged, $unmerged, $x, $act)
+
+merge_summary_single_action
+    use merged_actlist( (($act, ($x, *$xlist))), (($act, $xlist)), $x, $act )
+
+merge_summary_existing_action
+    use merged_actlist( $sum_merged, $sum_unmerged, $x, $act)
+    when
+        summary_includes_action($sum_unmerged, $act, ($act, $xlist_unmerged))
+        replace_xlist($sum_merged, $sum_unmerged, $act, ($x, *$xlist_unmerged))
+
+merge_summary_new_action
+    use merged_actlist( (($act, ($x)), *$sum_unmerged), $sum_unmerged, $x, $act)
+    when
+        notany
+            summary_includes_action($sum_unmerged, $act, $match)
+
+# replace_xlist(merged, unmerged, act, replacement)
+
+replace_xlist_rule_root
+    use replace_xlist((), (), $act, $new_xlist)
+
+replace_xlist_rule_replacement
+    use replace_xlist((($act, $new_xlist),*$rest), (($act, $old_xlist),*$rest), $act, $new_xlist)
+
+replace_xlist_rule_recurse
+    use replace_xlist(($elem,*$rest_merged), ($elem,*$rest_unmerged), $act, $new_xlist)
+    when
+        replace_xlist($rest_merged, $rest_unmerged, $act, $new_xlist)
+
+# summary_includes_action(summary, action, match)  (match=(action, xlist))
+summary_includes_action_base
+    use summary_includes_action((($act, $xlist),*$rest_sum), $act, ($act, $xlist))
+
+summary_includes_action_recurse 
+    use summary_includes_action((($act1, $xlist),*$rest_sum), $act, $match) 
+    when
+        summary_includes_action($rest_sum, $act, $match)
+
+        
+# actions_required goal
+actions_required_base
+    use actions_required(($x),($a))
+    when
+        action_required($x, $a)
+
+actions_required_recursive
+    use actions_required(($x, *$xlist), ($a, *$alist))
+    when
+        action_required($x, $a)
+        actions_required($xlist, $alist)
+
+# action_required goal
+
+action_required
+    use action_required($x, $a)
+    when
+        permit_required($a, $x, $ie)
+        questions.import_or_export($ie)
+
+no_action_required
+    use action_required($x, "No permit required")
+    when
+        no_permit_required($x, $ie)
+        questions.import_or_export($ie)
+
+action_not_permitted
+    use action_required($x, "Action not permitted under any circumstances")
+    when
+        action_forbidden($x, $ie)
+        questions.import_or_export($ie)
+
+# Properties of taxa (Can we do this or do they have to be stringified?)
+
+part1
+    use part1($x)
+    when
+        check $x.part1_live and not $x.cites
+
+part2
+    use part2($x)
+    when
+        check $x.part2_live and not $x.cites
+
+cites
+    use cites($x)
+    when
+        check $x.cites
+
+native
+    use native($x)
+    when
+        check $x.regulated_native and not $x.cites
+
+
+# Applicable legislation rules
+
+part1_import
+    use no_permit_required($x, i)
+    when
+        part1($x)
+        notany
+            cites($x)
+
+part2_import_exemption
+    use no_permit_required($x, i)
+    when
+        questions.import_or_export(i)
+        part2($x)
+        questions.part2_import_exemption(True, $x)
+
+part2_import_no_exemption
+    use permit_required(s303EN, $x, i)
+    when
+        questions.import_or_export(i)
+        part2($x)
+        questions.part2_import_exemption(False, $x)
+
+unregulated_export
+    use no_permit_required($x, e)
+    when
+        questions.import_or_export(e)
+        notany
+            cites($x)
+            native($x)
+
+native_export_exemption
+    use no_permit_required($x, e)
+    when
+        questions.import_or_export(e)
+        native($x)
+        questions.regulated_native_export_exemption(True, $x)
+
+native_export_no_exemption
+    use permit_required(s303DE, $x, e)
+    when
+        questions.import_or_export(e)
+        native($x)
+        questions.regulated_native_export_exemption(False, $x)
+
+cites_exemption
+    use no_permit_required($x, $ie)
+    when
+        questions.import_or_export($ie)
+        cites($x)
+        questions.pre_cites_certificate(True, $x)
+
+cites_no_exemption
+    use permit_required(s303CE, $x, $ie)
+    when
+        questions.import_or_export($ie)
+        cites($x)
+        questions.pre_cites_certificate(False, $x)
+
+action_forbidden
+    use action_forbidden($x, $ie)
+    when
+        notany
+            no_permit_required($x, $ie)
+            permit_required($s, $x, $ie)
+

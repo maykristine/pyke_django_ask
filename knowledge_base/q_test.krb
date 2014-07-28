@@ -1,0 +1,61 @@
+# q_test.krb
+
+ask_all_qs
+    use ask_all_questions($yn,$int,$num,$flt,$str,$sel1,$seln)
+    when
+        ask_all_direct_questions($yn,$int,$num,$flt,$str)
+        ask_select_1($sel1)
+        ask_select_n($seln)
+   
+ask_all_direct_qs
+    use ask_all_direct_questions($yn,$int,$num,$flt,$str)
+    when
+        ask_yn($yn)
+        ask_int($int)
+        ask_numb($num)
+        ask_float($flt)
+        ask_string($str)
+  
+ask_yn_qs
+    use ask_yn(($a, $b))
+    when
+        test_questions.test_yn(science, $a)
+        test_questions.test_yn_no_reviews(beer, $b)
+
+ask_int_qs
+    use ask_int(($c,$d))
+    when
+        test_questions.test_int(gizmos, $c)
+        test_questions.test_int_no_reviews(widgets, $d)
+
+ask_num_qs
+    use ask_numb(($e, $f))
+    when
+        test_questions.test_numb(signal, noise, $e)
+        test_questions.test_numb_no_reviews(power, weight, $f)
+
+ask_flt_qs
+    use ask_float(($g, $h))
+    when
+        test_questions.test_float(hit, miss, $g)
+        test_questions.test_float_no_reviews(meat, bread, $h)
+
+ask_str_qs
+    use ask_string(($i, $j))
+    when
+        test_questions.test_string(dog, $i)
+        test_questions.test_string_no_review(turtle, $j)
+
+ask_sel1_qs
+    use ask_select_1(($k, $l))
+    when
+        test_questions.select_1_test_numeric($k)
+        test_questions.select_1_test_alpha($l)
+
+ask_seln_qs
+    use ask_select_n(($m, $n, $o))
+    when
+        test_questions.select_n_test_no_reviews($m)
+        test_questions.select_n_test_reviews_alpha($n)
+        test_questions.select_n_test_reviews_num($o)
+        

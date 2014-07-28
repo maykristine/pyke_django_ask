@@ -1,0 +1,35 @@
+# questions.kqb
+
+import_or_export($ans)
+    Do you want to import or export the specimens?
+    ---
+    $ans = select_1
+        i: import
+           ! The specimens are to be imported into Australia.
+        e: export
+           ! The specimens are to be exported from Australia.
+
+
+part2_import_exemption($ans, $x)
+    Does an exemption for the import of the $x specimen(s) apply?
+    ---
+    $ans = yn
+        True ! A part 2 live import exemption applies for $x
+        False ! No exemption applies
+
+
+pre_cites_certificate($ans, $x)
+    Do you hold a pre-CITES certificate for the $x specimens?
+    ---
+    $ans = yn
+        True ! A pre-CITES certificate for the $x specimen(s) exists
+        False ! No pre-CITES certificate for the $x specimen(s) exists
+
+regulated_native_export_exemption($ans, $x)
+    Does an exemption for the export of the $x specimen(s) apply?
+    ---
+    $ans = yn
+        True ! A regulated native export exemption applies for $x
+        False ! No regulated native export exemption applies for $x
+
+

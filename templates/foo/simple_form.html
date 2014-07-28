@@ -1,0 +1,19 @@
+<html>
+<head>
+<title>{{title}}</title>
+</head>
+<body>
+<h1>{{title}}</h1>
+<h2>{{heading}}</h2>
+{% if intro_html %}
+{{intro_html}}
+{% endif %}
+{% if intro_txt %}
+<p>{{intro_txt}}</p>
+{% endif %}
+<form enctype="multipart/form-data" method="POST">
+{{form.as_p}}
+<input type="submit" value="Submit"/>
+</form>
+</body>
+</html>

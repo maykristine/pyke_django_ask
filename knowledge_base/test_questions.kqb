@@ -1,0 +1,145 @@
+# test_questions.kqb
+
+test_yn($topic, $ans)
+    Do you know about $topic?
+    ---
+    $ans = yn
+        True ! You are the the $topic meister!
+        False ! Time to learn about $topic!
+
+test_int($things, $ans)
+    How many $things do you have?
+    ---
+    $ans = integer(0-100)
+        -6   ! You'll need more $things!
+        7    ! Excellent, that's one for each day of the week!
+        8-12 ! You're a $things machine!
+        13-  ! Wow, that's a lot of $things!
+
+test_yn_no_reviews($topic, $ans)
+    Do you know about $topic?
+    ---
+    $ans = yn
+
+test_int_no_reviews($things, $ans)
+    How many $things do you have?
+    ---
+    $ans = integer(0-100)
+
+test_numb($thing1, $thing2, $ans)
+    What's your $thing1 to $thing2 ratio?
+    ---
+    $ans = number(0.001-1000)
+        -0.5  ! That's ridiculously low!
+        0.5-1 ! You need more $thing1
+        1-2   ! You need more $thing2
+        2-    ! That's ridiculously high!
+
+test_numb_no_reviews($thing1, $thing2, $ans)
+    What's your $thing1 to $thing2 ratio?
+    ---
+    $ans = number(0.001-1000)
+
+test_float($thing1, $thing2, $ans)
+    What's your $thing1 to $thing2 ratio?
+    ---
+    $ans = float(0.001-1000.0)
+        -0.5  ! That's ridiculously low!
+        0.5-1.0 ! You need more $thing1
+        1.0-2.0   ! You need more $thing2
+        2.0-    ! That's ridiculously high!
+
+test_float_no_reviews($thing1, $thing2, $ans)
+    What's your $thing1 to $thing2 ratio?
+    ---
+    $ans = float(0.001-1000.0)
+
+test_string($animal, $ans)
+    What's the name of your pet $animal?
+    ---
+    $ans = string(2-50)
+        /^[Ff]red$/ ! Wow!  My $animal's name is Fred too!
+        /^[^Ff][^r][^e][^d]$/ ! What a dull name!
+        2-3 ! What a dull name!
+        5-  ! What a dull name!
+
+test_string_no_review($animal, $ans)
+    What's the name of your pet $animal?
+    ---
+    $ans = string(2-50)
+
+select_1_test_numeric($ans)
+    What's your favourite meal? (numeric, review)
+    ---
+    $ans = select_1
+        1: Pizza
+           ! Everybody loves pizza!
+        2: Blue Cheese
+           ! with pear!  Yum yum!
+        3: Schweinshaxe
+           ! Mmmmmmm... Pork knuckles!!
+        4: Something else
+           ! You have no taste
+
+select_1_test_alpha($ans)
+    What's your favourite meal? (alpha, reviews)
+    ---
+    $ans = select_1
+        p: Pizza
+           ! Everybody loves pizza!
+        bc: Blue Cheese
+            ! with pear!  Yum yum!
+        hocks: Schweinshaxe
+               ! Mmmmmmm... Pork knuckles!!
+        other: Something else
+               ! You have no taste
+
+select_n_test_no_reviews($ans)
+    What programming languages do you know? (alpha, no reviews) (select all that apply)
+    ---
+    $ans = select_n
+        c: C
+        cpp: C++
+        pl: PERL
+        plg: Prolog
+        py: Python
+        co: COBOL
+
+select_n_test_reviews_alpha($ans)
+    What programming languages are you familiar with? (alpha, reviews) (select all that apply)
+    ---
+    $ans = select_n
+        c: C
+           ! C is the grand-daddy of all decent programming languages
+        cpp: C++
+             ! Operator overriding!!
+        pl: PERL
+            ! Valid expressions that look like line noise!
+        plg: Prolog
+             ! I program therefore I am
+        j: Java
+           ! Look out for the Oracle Monster!
+        py: Python
+            ! Smart cookie!
+        co: COBOL
+            ! Eeeewww!
+
+select_n_test_reviews_num($ans)
+    What languages can you program in? (numeric, reviews) (select all that apply)
+    ---
+    $ans = select_n
+        1: C
+           ! C is the grand-daddy of all decent programming languages
+        2: C++
+           ! Operator overriding!!
+        3: PERL
+           ! Valid expressions that look like line noise!
+        4: Prolog
+           ! I program therefore I am
+        5: Java
+           ! Ho Hum!
+        6: Python
+           ! Ta Da!
+        7: COBOL
+           ! Eeeewww!
+
